@@ -39,7 +39,25 @@ public class SortedSearching {
 	 * @return -1 if not found or the position if found.
 	 */
 	public static int binarySearchIterative(int findMe, ListADT<Integer> dataset) {
-		throw new TODOErr();
+		int left = 0;
+		int right = dataset.size();
+		int middle;
+		int atMiddle;
+		
+		while (right != left && left != dataset.size() - 1) {
+			middle = (left + right) / 2;
+			atMiddle = dataset.getIndex(middle);
+			
+			if (atMiddle == findMe) {
+				return middle;
+			} else if (atMiddle < findMe) {
+				left = middle;
+			} else {
+				right = middle;
+			}
+		}
+		
+		return -1;
 	}
 
 	/**
@@ -52,7 +70,20 @@ public class SortedSearching {
 	 * @return -1 if not found, or the index of findMe in dataset.
 	 */
 	private static int binarySearchR(int findMe, ListADT<Integer> dataset, int left, int right) {
-		throw new TODOErr();
+		int middle = (left + right) / 2;
+		int atMiddle = dataset.getIndex(middle);
+		
+		if (right == left || left == dataset.size() - 1) {
+			return -1;
+		}
+		
+		if (atMiddle == findMe) {
+			return middle;
+		} else if (atMiddle < findMe) {
+			return binarySearchR(findMe, dataset, middle, right);
+		} else {
+			return binarySearchR(findMe, dataset, left, middle);
+		}
 	}
 	
 	/**

@@ -13,7 +13,15 @@ public class SlowSorts {
 	 * @return true if they are sorted, false if not.
 	 */
 	public static boolean isSorted(ListADT<Integer> data) {
-		throw new TODOErr();
+		boolean sorted = true;
+		
+		for (int i = 0; i < data.size() - 1; i++) {
+			if (data.getIndex(i) > data.getIndex(i + 1)) {
+				sorted = false;
+			}
+		}
+		
+		return sorted;
 	}
 
 
@@ -25,7 +33,29 @@ public class SlowSorts {
 	 * @param target - the sorted list to modify (might be empty!)
 	 */
 	public static void insertSorted(int x, ListADT<Integer> target) {
-		throw new TODOErr();
+		
+		for (int i = 0; i < target.size(); i++) {
+			if (target.getIndex(i) > x) {
+				target.addIndex(i, x);
+				return;
+			}
+		}
+		
+		target.addBack(x);
+		
+		
+		// Attempt at binary search
+		/*
+		 * int left = 0; int right = target.size(); int middle = (left + right) / 2; int
+		 * atMiddle = target.getIndex(middle);
+		 * 
+		 * System.out.println(left + " " + right);
+		 * 
+		 * if (target.size() <= 1) { target.addBack(x); return; }
+		 * 
+		 * if (x < atMiddle) { insertSorted(x, target.slice(left, middle + 1)); } else
+		 * if (x > atMiddle) { insertSorted(x, target.slice(middle, right)); }
+		 */
 	}
 
 	/**
@@ -38,8 +68,18 @@ public class SlowSorts {
 	 */
 	public static int findMinPosition(ListADT<Integer> list, int start) {
 		assert (start < list.size()) : "There should be stuff in the list to the right of start!";
+		
+		int min = list.getIndex(start);
+		int minPosition = start;
+		
+		for (int i = start; i < list.size(); i++) {
+			if (min > list.getIndex(i)) {
+				min = list.getIndex(i);
+				minPosition = i;
+			}
+		}
 
-		throw new TODOErr();
+		return minPosition;
 	}
 
 	/**
@@ -51,7 +91,12 @@ public class SlowSorts {
 	 */
 	public static ListADT<Integer> insertionSort(ListADT<Integer> input) {
 		ListADT<Integer> output = new JavaList<>();
-		throw new TODOErr();
+		
+		for (Integer x : input) {
+			insertSorted(x, output);
+		}
+		
+		return output;
 	}
 
 	/**
@@ -65,7 +110,9 @@ public class SlowSorts {
 	 *              in-place.
 	 */
 	public static void selectionSort(ListADT<Integer> fixMe) {
-		throw new TODOErr();
+		for (int i = 0; i < fixMe.size(); i++) {
+			fixMe.swap(i, findMinPosition(fixMe, i));
+		}
 	}
 
 }

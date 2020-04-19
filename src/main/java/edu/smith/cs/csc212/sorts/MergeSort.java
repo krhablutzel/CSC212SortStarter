@@ -14,7 +14,27 @@ public class MergeSort {
 	 */
 	public static ListADT<Integer> combineTwoSortedLists(ListADT<Integer> lhs, ListADT<Integer> rhs) {
 		ListADT<Integer> output = new JavaList<>();
-		throw new TODOErr();
+		int lFront;
+		int rFront;
+		
+		while (lhs.size() > 0 && rhs.size() > 0) {
+			lFront = lhs.getFront();
+			rFront = rhs.getFront();
+			
+			if (lFront <= rFront) {
+				output.addBack(lFront);
+				lhs.removeFront();
+			} else if (rFront < lFront) {
+				output.addBack(rFront);
+				rhs.removeFront();
+			}
+		}
+		
+		// add any remaining elements in one list or the other
+		output.addAll(lhs);
+		output.addAll(rhs);
+		
+		return output;
 	}
 	
 	/**
@@ -25,7 +45,11 @@ public class MergeSort {
 	 * @return a new list containing the sorted output.
 	 */
 	public static ListADT<Integer> doMergeSortRecursively(ListADT<Integer> input) {
-		throw new TODOErr();
+		if (input.size() == 1) {
+			return input;
+		}
+		int middle = input.size() / 2;
+		return combineTwoSortedLists(doMergeSortRecursively(input.slice(0, middle)), doMergeSortRecursively(input.slice(middle, input.size())));
 	}
 	
 	/**
@@ -36,6 +60,19 @@ public class MergeSort {
 	 * @return a new list containing the sorted output.
 	 */
 	public static ListADT<Integer> doMergeSortIteratively(ListADT<Integer> input) {
-		throw new TODOErr();
+		// Make list with each element in size 1 list
+		ListADT<ListADT<Integer>> pieces = new JavaList<>();
+		for (int i = 0; i < input.size(); i++) {
+			pieces.addBack(input.slice(i, i+1));
+		}
+		
+		// Merge
+		while (pieces.size() > 1) {
+			pieces.addBack(combineTwoSortedLists(pieces.getFront(), pieces.getIndex(1)));
+			pieces.removeFront();
+			pieces.removeFront();
+		}
+		
+		return pieces.getFront();
 	}
 }
