@@ -1,7 +1,6 @@
 package edu.smith.cs.csc212.sorts;
 
 import me.jjfoley.adt.ListADT;
-import me.jjfoley.adt.errors.TODOErr;
 import me.jjfoley.adt.impl.JavaList;
 
 public class SlowSorts {
@@ -33,29 +32,46 @@ public class SlowSorts {
 	 * @param target - the sorted list to modify (might be empty!)
 	 */
 	public static void insertSorted(int x, ListADT<Integer> target) {
-		
-		for (int i = 0; i < target.size(); i++) {
-			if (target.getIndex(i) > x) {
-				target.addIndex(i, x);
-				return;
-			}
+		if (target.isEmpty()) {
+			target.addFront(x);
+			return;
 		}
 		
-		target.addBack(x);
+		int insertIndex = insertSortedR(x, target, 0, target.size());
+		target.addIndex(insertIndex, x);
+	}
+	
+	/**
+	 * Find where to insert an integer in the sorted list target by recursive binary search.
+	 * 
+	 * @param x - the integer you're inserting
+	 * @param target - the list you're searching!
+	 * @param left - the farthest left index it could possibly be (default=0).
+	 * @param right - the farthest right index it could possibly be (default=dataset.size()).
+	 * @return the index to insert x in target.
+	 */
+	private static int insertSortedR(int x, ListADT<Integer> target, int left, int right) {
+		int middle = (left + right) / 2;
+		int atMiddle = target.getIndex(middle);
 		
+		// ways to end
+		if (middle == left) {
+			// narrowed down to 1 - do we go right or left of it?
+			if (atMiddle > x) {
+				return middle;
+			} else {
+				return middle + 1;
+			}
+		} else if (left == target.size() - 1) {
+			return right;
+		}
 		
-		// Attempt at binary search
-		/*
-		 * int left = 0; int right = target.size(); int middle = (left + right) / 2; int
-		 * atMiddle = target.getIndex(middle);
-		 * 
-		 * System.out.println(left + " " + right);
-		 * 
-		 * if (target.size() <= 1) { target.addBack(x); return; }
-		 * 
-		 * if (x < atMiddle) { insertSorted(x, target.slice(left, middle + 1)); } else
-		 * if (x > atMiddle) { insertSorted(x, target.slice(middle, right)); }
-		 */
+		// narrowing down range
+		if (atMiddle < x) {
+			return insertSortedR(x, target, middle, right);
+		} else {
+			return insertSortedR(x, target, left, middle);
+		}
 	}
 
 	/**
